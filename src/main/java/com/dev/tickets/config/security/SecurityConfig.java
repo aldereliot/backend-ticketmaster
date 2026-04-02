@@ -1,5 +1,6 @@
 package com.dev.tickets.config.security;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,6 +27,8 @@ public class SecurityConfig {
 
     private final AuthJwtFilter authJwtFilter;
     private final AuthenticationEntryPoint authenticationEntryPoint;
+    @Value("${FRONTEND_URL}")
+    private String frontendUrl;
 
     public SecurityConfig(AuthJwtFilter authJwtFilter, AuthenticationEntryPoint authenticationEntryPoint) {
         this.authJwtFilter = authJwtFilter;
@@ -63,7 +66,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration cors = new CorsConfiguration();
-        cors.setAllowedOrigins(List.of("https://ticketmasterportal.netlify.app"));
+        cors.setAllowedOrigins(List.of(this.frontendUrl));
         cors.setAllowedMethods(List.of("GET", "PUT", "DELETE", "POST", "OPTIONS", "PATCH"));
         cors.setAllowedHeaders(List.of("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

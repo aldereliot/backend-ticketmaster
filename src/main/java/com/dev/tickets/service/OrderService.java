@@ -3,10 +3,7 @@ package com.dev.tickets.service;
 import com.dev.tickets.dto.order.*;
 import com.dev.tickets.dto.ticket.TicketResponse;
 import com.dev.tickets.exception.AppException;
-import com.dev.tickets.model.OrderEntity;
-import com.dev.tickets.model.OrderDetailEntity;
-import com.dev.tickets.model.TicketEntity;
-import com.dev.tickets.model.UserEntity;
+import com.dev.tickets.model.*;
 import com.dev.tickets.repository.OrderRepository;
 import com.dev.tickets.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
@@ -59,6 +56,17 @@ public class OrderService {
                         ticket.getQrImage()
                 ))
                 .toList();
+    }
+
+    public void cancelOrder(String id){
+        UserEntity user = userService.getUserLogged();
+        OrderEntity order = orderRepository.findById(id)
+                .orElseThrow( () -> new AppException("Order not found") );
+        if( !user.getId().equals(order.getUser().getId()) ){
+            throw new AppException("You are not authorize to do this action");
+        }
+        order.setStatus(OrderStatus.CANCELLED);
+        orderRepository.save(order);
     }
 
     private OrderDetailData mapToOrderDetailData(OrderDetailEntity detail){

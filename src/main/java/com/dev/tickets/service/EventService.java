@@ -17,6 +17,7 @@ import jdk.jfr.Event;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -211,6 +212,18 @@ public class EventService {
             throw new EventExpiredException();
         }
         return event;
+    }
+
+    @Scheduled(cron = "0 */2 * * * *")
+    public void expiredEvents(){
+        LocalDateTime now = LocalDateTime.now();
+        List<EventEntity> events = eventRepository.findExpiredEventsAndActive(now, EventStatusEnum.EXPIRED);
+        for( EventEntity e : events ){
+            System.out.println("Evento expirado: " + e.getName());
+            e.setStatus(EventStatusEnum.EXPIRED);
+        }
+        eventRepository.saveAll(events);
+        System.out.println("Eventos actualizados: " + events.size());
     }
 
 }

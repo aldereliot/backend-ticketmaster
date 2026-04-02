@@ -32,7 +32,7 @@ public class TicketTypeEntity {
     private Integer reserved;
     private Integer sold;
     @JsonIgnore
-    @OneToMany(mappedBy = "ticketType")
+    @OneToMany(mappedBy = "ticketType", cascade = CascadeType.ALL)
     private List<TicketEntity> tickets = new ArrayList<>();
     @JsonIgnore
     @ManyToOne

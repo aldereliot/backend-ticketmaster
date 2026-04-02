@@ -27,6 +27,8 @@ public class CheckoutService {
     private final OrderRepository orderRepository;
     @Value("${stripe.api.key}")
     private String stripeApiKey;
+    @Value("${app.frontend-url}")
+    private String frontendUrl;
 
     @Transactional
     public String createCheckout(CheckoutRequest request) {
@@ -75,8 +77,8 @@ public class CheckoutService {
         SessionCreateParams params = SessionCreateParams.builder()
                 .addAllLineItem(items)
                 .setMode(SessionCreateParams.Mode.PAYMENT)
-                .setSuccessUrl("http://localhost:5173/success?orderId="+saved.getId())
-                .setCancelUrl("http://localhost:5173/cancel?orderId="+saved.getId())
+                .setSuccessUrl(this.frontendUrl+"/success?orderId="+saved.getId())
+                .setCancelUrl( this.frontendUrl+"/cancel?orderId="+saved.getId())
                 .putMetadata("orderId", saved.getId())
                 .setPaymentIntentData(
                     SessionCreateParams.PaymentIntentData.builder()

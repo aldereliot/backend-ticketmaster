@@ -101,4 +101,13 @@ public interface EventRepository extends JpaRepository<EventEntity, Integer>, Jp
     """
     )
     List<EventCardResponse> findByCategoryName(@Param("status") EventStatusEnum status, @Param("categoryName") String categoryName, @Param("now") LocalDateTime now, Pageable pageable);
+    @Query("""
+            SELECT e FROM EventEntity e
+            WHERE e.startDate < :time
+            AND e.status <> :status
+            """)
+    List<EventEntity> findExpiredEventsAndActive(
+            @Param("time") LocalDateTime now,
+            @Param("status") EventStatusEnum status
+    );
 }
