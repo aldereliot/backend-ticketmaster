@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: tickets
+
+  datasource:
+    url: ${POSTGRESQL_URL}
+    username: ${POSTGRESQL_USERNAME}
+    password: ${POSTGRESQL_PASSWORD}
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+  mvc:
+    throw-exception-if-handler-not-found: true
+
+  security:
+    user:
+      name: ${SECURITY_USER_NAME}
+      password: ${SECURITY_USER_PASSWORD}
+
+jwt:
+  private:
+    key: ${JWT_PRIVATE_KEY}
+
+cloudinary:
+  api:
+    key: ${CLOUDINARY_API_KEY}
+    secret: ${CLOUDINARY_API_SECRET}
+  cloud-name: deo97f38k
+
+stripe:
+  api:
+    key: ${STRIPE_API_KEY}
+  webhook:
+    secret: ${STRIPE_WEBHOOK_SECRET}
